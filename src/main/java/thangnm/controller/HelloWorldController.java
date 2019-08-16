@@ -15,4 +15,9 @@ public class HelloWorldController {
     public String hello(){
         return "hello";
     }
+
+    @RequestMapping(value = "/language")
+    public String language(){
+        return "language";
+    }
 }
