@@ -13,8 +13,8 @@
 </head>
 <body>
     Language :
-    <a href="?language=en">English</a>|
-    <a href="?language=vi">Viet Nam</a>|
+    <a href="${pageContext.request.contextPath}/language?language=en">English</a>|
+    <a href="${pageContext.request.contextPath}/language?language=vi_VN">Viet Nam</a>|
 
     <h2>hello :  <spring:message code="hello" text="default text" /></h2>
 
