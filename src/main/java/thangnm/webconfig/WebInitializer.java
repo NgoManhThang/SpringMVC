@@ -29,4 +29,15 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 //        characterEncodingFilter.
         return new Filter[] {characterEncodingFilter};
     }
+
+//    @Override
+//    public void onStartup(ServletContext servletContext) throws ServletException {
+//        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
+//        applicationContext.register(SpringWebConfig.class);
+//
+//        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("SpringDispatcher",
+//                new DispatcherServlet(applicationContext));
+//
+////        super.onStartup(servletContext);
+//    }
 }
