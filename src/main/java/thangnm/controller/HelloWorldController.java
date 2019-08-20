@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import thangnm.dto.TStudentInformation;
+import thangnm.dto.TTeacherInformation;
 import thangnm.service.StudentInformationService;
 
 import java.util.List;
@@ -30,10 +31,17 @@ public class HelloWorldController {
         return "language";
     }
 
-    @RequestMapping(value = "/student")
+    @RequestMapping(value = "/student/list")
     public String findAll(Model model){
         List<TStudentInformation> list = studentInformationService.findAll();
         model.addAttribute("listData", list);
         return "student";
+    }
+
+    @RequestMapping(value = "/teacher/list")
+    public String findAllTeacher(Model model){
+        List<TTeacherInformation> list = studentInformationService.findAllTeacher();
+        model.addAttribute("listData", list);
+        return "teacher";
     }
 }

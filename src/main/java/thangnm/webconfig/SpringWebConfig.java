@@ -10,10 +10,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -65,10 +62,10 @@ public class SpringWebConfig extends WebMvcConfigurationSupport {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("language");
+//        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+//        localeChangeInterceptor.setParamName("language");
         registry.addInterceptor(new DataSourceIntercetor()).addPathPatterns("/student/*", "/teacher/*");
-        registry.addInterceptor(localeChangeInterceptor).addPathPatterns("/*");
+//        registry.addInterceptor(localeChangeInterceptor).addPathPatterns("/*");
     }
 
 //    @Bean
@@ -81,13 +78,14 @@ public class SpringWebConfig extends WebMvcConfigurationSupport {
 //        return driverManagerDataSource;
 //    }
 
+    @Autowired
     @Bean(name = "dataSource")
     public DataSource getDataSource( DataSource dataSourceStudent, DataSource dataSourceTeacher ){
         MyRoutingDataSource myRoutingDataSource = new MyRoutingDataSource();
         Map<Object, Object> dsMap = new HashMap<>();
         dsMap.put("STUDENT_DS", dataSourceStudent);
         dsMap.put("TEACHER_DS", dataSourceTeacher);
-        myRoutingDataSource.setDefaultTargetDataSource(dsMap);
+        myRoutingDataSource.setTargetDataSources(dsMap);
         return myRoutingDataSource;
     }
 
@@ -126,5 +124,10 @@ public class SpringWebConfig extends WebMvcConfigurationSupport {
     @Override
     protected void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        super.addResourceHandlers(registry);
     }
 }

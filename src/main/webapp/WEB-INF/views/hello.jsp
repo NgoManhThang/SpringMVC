@@ -12,5 +12,7 @@
 </head>
 <body>
     <h1>Ngo Manh Thang</h1>
+    <a href="${pageContext.request.contextPath}/student/list">Student</a>
+    <a href="${pageContext.request.contextPath}/teacher/list">Teacher</a>
 </body>
 </html>

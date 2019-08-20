@@ -4,6 +4,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletContext;
 
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
@@ -26,11 +27,20 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
-//        characterEncodingFilter.
         return new Filter[] {characterEncodingFilter};
     }
 
-//    @Override
+    @Override
+    protected void registerContextLoaderListener(ServletContext servletContext) {
+        super.registerContextLoaderListener(servletContext);
+    }
+
+    @Override
+    protected void registerDispatcherServlet(ServletContext servletContext) {
+        super.registerDispatcherServlet(servletContext);
+    }
+
+    //    @Override
 //    public void onStartup(ServletContext servletContext) throws ServletException {
 //        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
 //        applicationContext.register(SpringWebConfig.class);

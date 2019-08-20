@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import thangnm.dao.StudentInformationDao;
 import thangnm.dto.TStudentInformation;
+import thangnm.dto.TTeacherInformation;
 
 import java.util.List;
 
@@ -18,5 +19,10 @@ public class StudentInformationServiceImpl implements StudentInformationService{
     @Override
     public List<TStudentInformation> findAll() {
         return studentInformationDao.findAll();
+    }
+
+    @Override
+    public List<TTeacherInformation> findAllTeacher() {
+        return studentInformationDao.findAllTeacher();
     }
 }
