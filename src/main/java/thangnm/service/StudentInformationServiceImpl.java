@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import thangnm.dao.StudentInformationDao;
 import thangnm.dto.TStudentInformation;
-import thangnm.dto.TTeacherInformation;
 
 import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
+@SuppressWarnings("all")
 public class StudentInformationServiceImpl implements StudentInformationService{
 
     @Autowired
@@ -22,7 +22,8 @@ public class StudentInformationServiceImpl implements StudentInformationService{
     }
 
     @Override
-    public List<TTeacherInformation> findAllTeacher() {
-        return studentInformationDao.findAllTeacher();
+    public TStudentInformation findById(String id) {
+        return studentInformationDao.findById(id);
     }
+
 }

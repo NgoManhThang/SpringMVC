@@ -14,12 +14,9 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import thangnm.interceptor.DataSourceIntercetor;
-import thangnm.routing.MyRoutingDataSource;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 
 @EnableWebMvc
 @Configuration
@@ -38,7 +35,7 @@ public class SpringWebConfig extends WebMvcConfigurationSupport {
     @Bean
     public InternalResourceViewResolver viewResolver(){
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("WEB-INF/views/");
+        viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
@@ -54,7 +51,7 @@ public class SpringWebConfig extends WebMvcConfigurationSupport {
     @Bean(name = "localeResolver")
     public LocaleResolver cookieLocaleResolver(){
         CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-//        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
         cookieLocaleResolver.setCookieName("myAppLocaleCookie");
         cookieLocaleResolver.setCookieMaxAge(30000);
         return cookieLocaleResolver;
@@ -62,50 +59,18 @@ public class SpringWebConfig extends WebMvcConfigurationSupport {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-//        localeChangeInterceptor.setParamName("language");
-        registry.addInterceptor(new DataSourceIntercetor()).addPathPatterns("/student/*", "/teacher/*");
-//        registry.addInterceptor(localeChangeInterceptor).addPathPatterns("/*");
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("language");
+        registry.addInterceptor(localeChangeInterceptor).addPathPatterns("/*");
     }
 
-//    @Bean
-//    public DataSource dataSource(){
-//        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-//        driverManagerDataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
-//        driverManagerDataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
-//        driverManagerDataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-//        driverManagerDataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-//        return driverManagerDataSource;
-//    }
-
-    @Autowired
-    @Bean(name = "dataSource")
-    public DataSource getDataSource( DataSource dataSourceStudent, DataSource dataSourceTeacher ){
-        MyRoutingDataSource myRoutingDataSource = new MyRoutingDataSource();
-        Map<Object, Object> dsMap = new HashMap<>();
-        dsMap.put("STUDENT_DS", dataSourceStudent);
-        dsMap.put("TEACHER_DS", dataSourceTeacher);
-        myRoutingDataSource.setTargetDataSources(dsMap);
-        return myRoutingDataSource;
-    }
-
-    @Bean(name = "dataSourceStudent")
-    public DataSource getDataSourceStudent(){
+    @Bean
+    public DataSource dataSource(){
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        driverManagerDataSource.setDriverClassName(environment.getRequiredProperty("student.driverClassName"));
-        driverManagerDataSource.setUrl(environment.getRequiredProperty("student.url"));
-        driverManagerDataSource.setUsername(environment.getRequiredProperty("student.username"));
-        driverManagerDataSource.setPassword(environment.getRequiredProperty("student.password"));
-        return driverManagerDataSource;
-    }
-
-    @Bean(name = "dataSourceTeacher")
-    public DataSource getDataSourceTeacher(){
-        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        driverManagerDataSource.setDriverClassName(environment.getRequiredProperty("teacher.driverClassName"));
-        driverManagerDataSource.setUrl(environment.getRequiredProperty("teacher.url"));
-        driverManagerDataSource.setUsername(environment.getRequiredProperty("teacher.username"));
-        driverManagerDataSource.setPassword(environment.getRequiredProperty("teacher.password"));
+        driverManagerDataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
+        driverManagerDataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+        driverManagerDataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+        driverManagerDataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
         return driverManagerDataSource;
     }
 

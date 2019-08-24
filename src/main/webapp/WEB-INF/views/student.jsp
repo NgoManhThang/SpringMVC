@@ -20,6 +20,7 @@
             <th>phone</th>
             <th>address</th>
             <th>email</th>
+            <th>Detail</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,9 @@
                 <td>${item.phone}</td>
                 <td>${item.address}</td>
                 <td>${item.email}</td>
+                <td>
+                    <a href="/student/${item.id}/detail">Click me</a>
+                </td>
             </tr>
         </c:forEach>
     </tbody>

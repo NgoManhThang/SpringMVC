@@ -40,14 +40,4 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
         super.registerDispatcherServlet(servletContext);
     }
 
-    //    @Override
-//    public void onStartup(ServletContext servletContext) throws ServletException {
-//        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
-//        applicationContext.register(SpringWebConfig.class);
-//
-//        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("SpringDispatcher",
-//                new DispatcherServlet(applicationContext));
-//
-////        super.onStartup(servletContext);
-//    }
 }
