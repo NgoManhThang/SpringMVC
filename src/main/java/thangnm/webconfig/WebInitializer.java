@@ -9,12 +9,12 @@ import javax.servlet.ServletContext;
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+        return new Class[] {SpringWebConfig.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {SpringWebConfig.class};
+        return null;
     }
 
     @Override
@@ -28,16 +28,6 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
         return new Filter[] {characterEncodingFilter};
-    }
-
-    @Override
-    protected void registerContextLoaderListener(ServletContext servletContext) {
-        super.registerContextLoaderListener(servletContext);
-    }
-
-    @Override
-    protected void registerDispatcherServlet(ServletContext servletContext) {
-        super.registerDispatcherServlet(servletContext);
     }
 
 }

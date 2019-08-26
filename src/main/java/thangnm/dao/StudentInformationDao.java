@@ -1,12 +1,15 @@
 package thangnm.dao;
 
-import thangnm.dto.TStudentInformation;
+import thangnm.dto.TStudentInformationDto;
+import thangnm.entity.TStudentInformation;
 
 import java.util.List;
 
 public interface StudentInformationDao {
 
-    List<TStudentInformation> findAll();
+    List<TStudentInformationDto> findAll();
 
-    TStudentInformation findById( String id );
+    TStudentInformationDto findById(String id );
+
+    void save(TStudentInformation studentInformation);
 }

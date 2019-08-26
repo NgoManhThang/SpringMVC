@@ -12,6 +12,9 @@
     <title>Danh sách thành viên</title>
 </head>
 <body>
+<div>
+    <a href="/save">SAVE</a>
+</div>
 <table>
     <thead>
         <tr>

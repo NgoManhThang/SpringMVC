@@ -1,71 +1,55 @@
 package thangnm.webconfig;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.convert.Property;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
 import java.util.Locale;
+import java.util.Properties;
 
 @EnableWebMvc
 @Configuration
 @EnableTransactionManagement
 @ComponentScan({"thangnm"})
 @PropertySources({
-        @PropertySource("/resources/jdbc.properties"),
-        @PropertySource("/i18n/messages_en.properties"),
-        @PropertySource("/i18n/messages_vi.properties")
+        @PropertySource("classpath:jdbc.properties")
 })
-public class SpringWebConfig extends WebMvcConfigurationSupport {
+@SuppressWarnings("all")
+public class SpringWebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private Environment environment;
 
     @Bean
-    public InternalResourceViewResolver viewResolver(){
+    public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
 
-    @Bean(name = "messageSource")
-    public MessageSource reloadableResourceBundleMessageSource(){
-        ReloadableResourceBundleMessageSource reloadableResourceBundleMessageSource = new ReloadableResourceBundleMessageSource();
-        reloadableResourceBundleMessageSource.setBasename("/i18n/messages");
-        reloadableResourceBundleMessageSource.setDefaultEncoding("UTF-8");
-        return reloadableResourceBundleMessageSource;
-    }
-
-    @Bean(name = "localeResolver")
-    public LocaleResolver cookieLocaleResolver(){
-        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
-        cookieLocaleResolver.setCookieName("myAppLocaleCookie");
-        cookieLocaleResolver.setCookieMaxAge(30000);
-        return cookieLocaleResolver;
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("language");
-        registry.addInterceptor(localeChangeInterceptor).addPathPatterns("/*");
-    }
-
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
         driverManagerDataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
@@ -75,24 +59,45 @@ public class SpringWebConfig extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource){
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         return namedParameterJdbcTemplate;
     }
 
+//    @Bean
+//    public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource) {
+//        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(dataSource);
+//        return dataSourceTransactionManager;
+//    }
+
     @Bean
-    public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource){
-        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(dataSource);
-        return dataSourceTransactionManager;
+    public LocalSessionFactoryBean sessionFactoryBean(DataSource dataSource){
+        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
+        localSessionFactoryBean.setDataSource(dataSource);
+
+        localSessionFactoryBean.setPackagesToScan("thangnm.entity");
+
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+        hibernateProperties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+
+        localSessionFactoryBean.setHibernateProperties(hibernateProperties);
+        return localSessionFactoryBean;
     }
 
-    @Override
-    protected void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
+    @Bean
+    @Autowired
+    public HibernateTransactionManager hibernateTransactionManager(SessionFactory sessionFactory){
+        HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
+        hibernateTransactionManager.setSessionFactory(sessionFactory);
+        return hibernateTransactionManager;
     }
 
-    @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
+    @Bean
+    public MultipartResolver multipartResolver(){
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+        commonsMultipartResolver.setMaxUploadSize(-1);
+        return commonsMultipartResolver;
     }
+
 }

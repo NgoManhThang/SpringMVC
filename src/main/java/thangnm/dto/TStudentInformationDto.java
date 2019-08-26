@@ -1,7 +1,7 @@
 package thangnm.dto;
 
 
-public class TStudentInformation {
+public class TStudentInformationDto {
     private Long id;
     private String name;
     private String phone;
@@ -48,10 +48,10 @@ public class TStudentInformation {
         this.email = email;
     }
 
-    public TStudentInformation() {
+    public TStudentInformationDto() {
     }
 
-    public TStudentInformation(Long id, String name, String phone, String address, String email) {
+    public TStudentInformationDto(Long id, String name, String phone, String address, String email) {
         this.id = id;
         this.name = name;
         this.phone = phone;

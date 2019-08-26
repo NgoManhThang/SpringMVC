@@ -1,12 +1,18 @@
 package thangnm.service;
 
-import thangnm.dto.TStudentInformation;
+import org.springframework.web.multipart.MultipartFile;
+import thangnm.dto.TStudentInformationDto;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface StudentInformationService {
 
-    List<TStudentInformation> findAll();
+    List<TStudentInformationDto> findAll();
 
-    TStudentInformation findById(String id);
+    TStudentInformationDto findById(String id);
+
+    boolean uploadFile(MultipartFile file) throws FileNotFoundException;
+
+    void save( TStudentInformationDto studentInformationDto );
 }
