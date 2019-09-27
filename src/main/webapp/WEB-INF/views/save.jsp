@@ -14,7 +14,7 @@
 </head>
 <body>
     <h1>Them moi sinh vien</h1>
-    <form:form modelAttribute="studendInformation" method="post" action="/save">
+    <form:form  modelAttribute="studendInformation" method="post" action="/save">
         <table>
             <tbody>
                 <tr>
